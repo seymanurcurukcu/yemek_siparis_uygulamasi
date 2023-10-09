@@ -2,37 +2,32 @@ import { useFormik } from "formik";
 import Link from "next/link";
 import Input from "../../components/form/Input";
 import Title from "../../components/ui/Title";
-import { loginSchema } from "@/components/schema/login";
-import { useSession, signIn } from "next-auth/react";
+import { adminSchema } from "../../components/schema/admin";
 
 const Login = () => {
-  const { data: session } = useSession();
-  console.log(session);
   const onSubmit = async (values, actions) => {
-    const {email, password} =values;
-    let options = {redirect:false, email, password}
-    const res= await signIn("credentials", options);
-    // await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 4000));
     actions.resetForm();
   };
   const { values, errors, touched, handleSubmit, handleChange, handleBlur } =
     useFormik({
       initialValues: {
-        email: "",
+        username: "",
         password: "",
       },
       onSubmit,
-      validationSchema: loginSchema,
+      validationSchema: adminSchema,
     });
+
   const inputs = [
     {
       id: 1,
-      name: "email",
-      type: "email",
-      placeholder: "Your Email Address",
-      value: values.email,
-      errorMessage: errors.email,
-      touched: touched.email,
+      name: "username",
+      type: "text",
+      placeholder: "Your Username",
+      value: values.username,
+      errorMessage: errors.username,
+      touched: touched.username,
     },
     {
       id: 2,
@@ -44,13 +39,14 @@ const Login = () => {
       touched: touched.password,
     },
   ];
+
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto py-3">
       <form
         className="flex flex-col items-center my-20 md:w-1/2 w-full mx-auto"
         onSubmit={handleSubmit}
       >
-        <Title addClass="text-[40px] mb-6">Login</Title>
+        <Title addClass="text-[40px] mb-6">Admin Login</Title>
         <div className="flex flex-col gap-y-3 w-full">
           {inputs.map((input) => (
             <Input
@@ -62,20 +58,10 @@ const Login = () => {
           ))}
         </div>
         <div className="flex flex-col w-full gap-y-3 mt-6">
-          <button className="btn-primary" type="submit">
-            LOGIN
-          </button>
-          <button
-            className="btn-primary !bg-secondary"
-            type="button"
-            onClick={() => signIn("github")}
-          >
-            <i className="fa fa-github mr-2 text-lg"></i>
-            GITHUB
-          </button>
-          <Link href="/auth/register">
+          <button className="btn-primary">LOGIN</button>
+          <Link href="/">
             <span className="text-sm underline cursor-pointer text-secondary">
-              Do you no have a account?
+              Home Page
             </span>
           </Link>
         </div>
@@ -83,4 +69,5 @@ const Login = () => {
     </div>
   );
 };
+
 export default Login;

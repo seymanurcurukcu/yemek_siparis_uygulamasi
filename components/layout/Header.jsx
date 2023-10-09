@@ -7,11 +7,13 @@ import {GiHamburgerMenu,GiCancel} from "react-icons/gi"
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useRouter } from "next/router";
 import Link from "next/link"
+import { useSelector } from "react-redux"
 
 const Header = () => {
     const [IsSearchModal, setIsSearchModal] = useState(false)
     const [IsMenuModal, setIsMenuModal] = useState(false)
     const router = useRouter();
+    const cart= useSelector((state)=>state.cart)
     return (
         <div
         className={`h-[5.5rem] z-50 relative ${
@@ -45,8 +47,15 @@ const Header = () => {
                     )}
                 </nav>
                 <div className="flex gap-x-4 items-center" >
-                    <Link href="/auth/login" className="hover:text-primary transition-all cursor-pointer"><BiSolidUser /></Link>
-                    <a href="#" className="hover:text-primary transition-al cursor-pointerl"><FaShoppingBag /></a>
+                    <span>
+                      <Link href="/auth/login" className="hover:text-primary transition-all cursor-pointer"><BiSolidUser /></Link>
+                    </span>
+                    <span className="relative"> 
+                    <Link href="/card" className="hover:text-primary transition-al cursor-pointerl"><FaShoppingBag /></Link>
+                    <span className="w-4 h-4 text-xs grid place-content-center rounded-full bg-primary absolute -top-2 -right-3 text-black font-bold">
+                        {cart.products.length === 0 ? "0" : cart.products.length}
+                    </span>
+                    </span>
                     <button className="hover:text-primary transition-all cursor-pointer" onClick={() => setIsSearchModal(true)}><FaSearch /></button>
                     <a href="#" className="md:inline-block hidden">
                          <button className="btn-primary">Order Online</button>
